@@ -62,7 +62,7 @@ public class PopulationQuery {
 	// argument 2: number of x-dimension buckets
 	// argument 3: number of y-dimension buckets
 	// argument 4: -v1, -v2, -v3, -v4, or -v5
-	
+
 	Rectangle usRectangle;
 	public static void main(String[] args) {
 		// FOR YOU
@@ -75,18 +75,16 @@ public class PopulationQuery {
 
 		switch(version){
 		case "-v1":
-			V1SimpleAndSequential v1 = new V1SimpleAndSequential(x, y);
-			v1.findUSRectangle(censusData);
-			System.out.println(v1.usRectangle.toString());
-			int returnType = V1SimpleAndSequential.DONE;
-			
+			V1SimpleAndSequential v1 = new V1SimpleAndSequential(x, y, censusData);
+			v1.findUSRectangle();
+			int returnType = QueryAlgorithm.DONE;
 			do {
 				returnType = v1.takeInput();
-				if(returnType ==  V1SimpleAndSequential.DONE) {
-					v1.findPopulation(censusData);
+				if(returnType ==  QueryAlgorithm.DONE) {
+					v1.findPopulation();
 				}
-			}while(returnType != V1SimpleAndSequential.EXIT);
-			
+			}while(returnType != QueryAlgorithm.EXIT);
+
 			break;
 		case "-v2":
 
@@ -102,7 +100,7 @@ public class PopulationQuery {
 			break;
 
 		}
-		
+
 	}
 
 }
