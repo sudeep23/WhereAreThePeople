@@ -19,6 +19,7 @@ public class QueryAlgorithm {
 	int y;
 	CensusData censusData;
 	
+	Long totalPopulation = new Long(0);
 	
 	Rectangle usRectangle;
 	Rectangle inputRecBoundary;
@@ -58,4 +59,14 @@ public class QueryAlgorithm {
 		}
 		return DONE;
 	}
+	
+	public void findUSRectangle() {
+
+	}
+	
+	public void findPopulation() {
+
+	}
+	
+	
 }
