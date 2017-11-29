@@ -6,7 +6,7 @@ public class V2SimpleAndParallel extends QueryAlgorithm{
 	// for parallel programming!
     static final ForkJoinPool fjPool = new ForkJoinPool();
     
-	int cutoff = 100;
+	int cutoff = 5000;
 	
 	public V2SimpleAndParallel(int x, int y, CensusData censusData) {
 		this.x = x;
@@ -25,18 +25,20 @@ public class V2SimpleAndParallel extends QueryAlgorithm{
         
 	}
 	
-	public void findPopulation() {
-        if (usRectangle == null)
-            return;
+	public long queryPopulation() {
         double westBound = (usRectangle.left + (inputRecBoundary.left - 1) * (usRectangle.right - usRectangle.left) / x);
 		double eastBound = (usRectangle.left + (inputRecBoundary.right) * (usRectangle.right - usRectangle.left) / x);
 		double northBound = (usRectangle.bottom + (inputRecBoundary.top) * (usRectangle.top - usRectangle.bottom) / y);
 		double southBound = (usRectangle.bottom + (inputRecBoundary.bottom - 1) * (usRectangle.top - usRectangle.bottom) / y);
-		Long totalPopulationInArea =  (long) fjPool.invoke(
+		return (long) fjPool.invoke(
                 new Query(0, censusData.data_size, westBound, eastBound, northBound, southBound));
-		System.out.println("Total Population in the Area: " + totalPopulationInArea);
+	}
+	
+	public void findPopulation() {
+		Long popInArea = queryPopulation();
+		System.out.println("Total Population in the Area: " + popInArea);
 		System.out.println("Total Population: " + totalPopulation);
-		float percent = (totalPopulationInArea.floatValue() * 100)/totalPopulation.floatValue();
+		float percent = (popInArea.floatValue() * 100)/totalPopulation.floatValue();
 		System.out.printf("Percent of total population: %.2f \n",percent);
 	}
 	

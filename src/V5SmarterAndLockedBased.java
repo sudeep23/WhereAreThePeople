@@ -40,17 +40,23 @@ public class V5SmarterAndLockedBased extends V2SimpleAndParallel {
         }
 	}
     
-	public void findPopulation() {
-		Long totalPopulationInArea = new Long(0);
+    public long queryPopulation() {
+    		Long totalPopulationInArea = new Long(0);
 		
 		totalPopulationInArea += grid[(int) (inputRecBoundary.right - 1)][(int) (inputRecBoundary.bottom - 1)];
 		totalPopulationInArea -= (inputRecBoundary.top == y ? 0 : grid[(int) (inputRecBoundary.right- 1)][(int) inputRecBoundary.top]); // top right
 		totalPopulationInArea -= (inputRecBoundary.left == 1 ? 0 : grid[(int) (inputRecBoundary.left- 1 - 1)][(int) (inputRecBoundary.bottom - 1)]); // bottom left
 		totalPopulationInArea += (inputRecBoundary.left == 1 || inputRecBoundary.top == y ? 0 : grid[(int) (inputRecBoundary.left - 1 - 1)][(int) inputRecBoundary.top]); // top left
 
-		System.out.println("Total Population in the Area: " + totalPopulationInArea);
+		return totalPopulationInArea;
+    	
+    }
+    
+	public void findPopulation() {
+		Long popInArea = queryPopulation();
+		System.out.println("Total Population in the Area: " + popInArea);
 		System.out.println("Total Population: " + totalPopulation);
-		float percent = (totalPopulationInArea.floatValue() * 100)/totalPopulation.floatValue();
+		float percent = (popInArea.floatValue() * 100)/totalPopulation.floatValue();
 		System.out.printf("Percent of total population: %.2f \n",percent);
 	}
     

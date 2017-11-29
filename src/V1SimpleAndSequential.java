@@ -21,7 +21,7 @@ public class V1SimpleAndSequential extends QueryAlgorithm{
 		}
 	}
 	
-	public void findPopulation() {
+	public long queryPopulation() {
 		Long totalPopulationInArea = new Long(0);
 		float width = (usRectangle.right - usRectangle.left) / x;
 		float height = (usRectangle.top - usRectangle.bottom) / y;
@@ -46,9 +46,13 @@ public class V1SimpleAndSequential extends QueryAlgorithm{
             		totalPopulationInArea += censusGroup.population;
             }
 		}
-		System.out.println("Total Population in the Area: " + totalPopulationInArea);
+		return totalPopulationInArea;	
+	}
+	public void findPopulation() {
+		Long popInArea = queryPopulation();
+		System.out.println("Total Population in the Area: " + popInArea);
 		System.out.println("Total Population: " + totalPopulation);
-		float percent = (totalPopulationInArea.floatValue() * 100)/totalPopulation.floatValue();
+		float percent = (popInArea.floatValue() * 100)/totalPopulation.floatValue();
 		System.out.printf("Percent of total population: %.2f \n",percent);
 	}
 }
