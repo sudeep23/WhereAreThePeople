@@ -10,6 +10,7 @@ public class V1SimpleAndSequential extends QueryAlgorithm{
 	public void findUSRectangle() {
 		usRectangle = new Rectangle(censusData.data[0].longitude, censusData.data[0].longitude, censusData.data[0].latitude, censusData.data[0].latitude);
 		Rectangle temp;
+		totalPopulation += censusData.data[0].population;
 		for (int i = 1; i < censusData.data_size; i++) {
 			CensusGroup censusGroup = censusData.data[i];
 			if(censusGroup != null) {
@@ -22,25 +23,28 @@ public class V1SimpleAndSequential extends QueryAlgorithm{
 	
 	public void findPopulation() {
 		Long totalPopulationInArea = new Long(0);
+		float width = (usRectangle.right - usRectangle.left) / x;
+		float height = (usRectangle.top - usRectangle.bottom) / y;
 		
-		double westBound = (usRectangle.left + (inputRecBoundary.left - 1) * ((usRectangle.right - usRectangle.left) / x));
-		double eastBound = (usRectangle.left + (inputRecBoundary.right) * ((usRectangle.right - usRectangle.left) / x));
-		double northBound = (usRectangle.bottom + (inputRecBoundary.top) * ((usRectangle.top - usRectangle.bottom) / y));
-		double southBound = (usRectangle.bottom + (inputRecBoundary.bottom - 1) * ((usRectangle.top - usRectangle.bottom) / y));
+		float westBound = (usRectangle.left + (inputRecBoundary.left - 1) * (width));
+		float eastBound = (usRectangle.left + (inputRecBoundary.right) * (width));
+		float northBound = (usRectangle.bottom + (inputRecBoundary.top) * (height));
+		float southBound = (usRectangle.bottom + (inputRecBoundary.bottom - 1) * (height));
 		
-		for (CensusGroup censusGroup : censusData.data) {
-			if(censusGroup != null) {
-	            float groupLong = censusGroup.longitude;
-	            float groupLat = censusGroup.latitude;
-	            // Defaults to North and/or East in case of tie
-	            if (groupLat >= southBound &&
-	                    (groupLat < northBound ||
-	                            (northBound - usRectangle.top) >= 0) &&
-	                            (groupLong < eastBound ||
-	                                    (eastBound - usRectangle.right) >= 0) &&
-	                                    groupLong >= westBound)
-	            	totalPopulationInArea += censusGroup.population;
-			}
+		for (int i = 0; i < censusData.data_size; i++) {
+			CensusGroup censusGroup = censusData.data[i];
+			
+            float groupLong = censusGroup.longitude;
+            float groupLat = censusGroup.latitude;
+            // Defaults to North and/or East in case of tie
+            if (groupLat >= southBound &&
+                    (groupLat < northBound ||
+                            (northBound - usRectangle.top) >= 0) &&
+                            (groupLong < eastBound ||
+                                    (eastBound - usRectangle.right) >= 0) &&
+                                    groupLong >= westBound) {
+            		totalPopulationInArea += censusGroup.population;
+            }
 		}
 		System.out.println("Total Population in the Area: " + totalPopulationInArea);
 		System.out.println("Total Population: " + totalPopulation);

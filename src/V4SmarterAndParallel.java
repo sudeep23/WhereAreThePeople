@@ -4,7 +4,7 @@ import java.util.concurrent.RecursiveTask;
 public class V4SmarterAndParallel extends V2SimpleAndParallel{
 	
 	int[][] grid;
-	int cutoff = 100;
+	int cutoff = 5000;
 	
 	
 	public V4SmarterAndParallel(int x, int y, CensusData censusData) {
