@@ -5,8 +5,8 @@ public class V5SmarterAndLockedBased extends V2SimpleAndParallel {
     private final ReentrantLock[][] locks;
 	int[][] grid;
     
-    public V5SmarterAndLockedBased(int x, int y, CensusData data) {
-        super(x, y, data);
+    public V5SmarterAndLockedBased(int x, int y, CensusData data,int cutoff) {
+        super(x, y, data,cutoff);
         grid = new int[x][y];
         locks = new ReentrantLock[x][y];
         for (int i = 0; i < x; i++) {

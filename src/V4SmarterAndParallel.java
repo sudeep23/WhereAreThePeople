@@ -4,11 +4,9 @@ import java.util.concurrent.RecursiveTask;
 public class V4SmarterAndParallel extends V2SimpleAndParallel{
 	
 	int[][] grid;
-	int cutoff = 5000;
 	
-	
-	public V4SmarterAndParallel(int x, int y, CensusData censusData) {
-		super(x, y, censusData);
+	public V4SmarterAndParallel(int x, int y, CensusData censusData,int cutOff) {
+		super(x, y, censusData,cutOff);
         grid = new int[x][y];
 	}
 	public void findUSRectangle() {

@@ -8,10 +8,11 @@ public class V2SimpleAndParallel extends QueryAlgorithm{
     
 	int cutoff = 5000;
 	
-	public V2SimpleAndParallel(int x, int y, CensusData censusData) {
+	public V2SimpleAndParallel(int x, int y, CensusData censusData, int cutOff) {
 		this.x = x;
 		this.y = y;
 		this.censusData = censusData;
+		this.cutoff = cutOff;
 	}
 	
 	public void findUSRectangle() {

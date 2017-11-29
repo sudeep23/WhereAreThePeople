@@ -45,7 +45,7 @@ public class PopulationQuery {
 
 			break;
 		case "-v2":
-			V2SimpleAndParallel v2 = new V2SimpleAndParallel(x, y, censusData);
+			V2SimpleAndParallel v2 = new V2SimpleAndParallel(x, y, censusData, 5000);
 			long startProcessTimeV2 = System.nanoTime();
 			v2.findUSRectangle();
 			long endProcessTimeV2 = System.nanoTime();
@@ -80,7 +80,7 @@ public class PopulationQuery {
 			}while(returnType3 != QueryAlgorithm.EXIT);
 			break;
 		case "-v4":
-			V4SmarterAndParallel v4 = new V4SmarterAndParallel(x, y, censusData);
+			V4SmarterAndParallel v4 = new V4SmarterAndParallel(x, y, censusData, 5000);
 			long startProcessTimeV4 = System.nanoTime();
 			v4.findUSRectangle();
 			long endProcessTimeV4 = System.nanoTime();
@@ -97,7 +97,7 @@ public class PopulationQuery {
 			}while(returnType4 != QueryAlgorithm.EXIT);
 			break;
 		case "-v5":
-			V5SmarterAndLockedBased v5 = new V5SmarterAndLockedBased(x, y, censusData);
+			V5SmarterAndLockedBased v5 = new V5SmarterAndLockedBased(x, y, censusData,5000);
 			long startProcessTimeV5 = System.nanoTime();
 			v5.findUSRectangle();
 			long endProcessTimeV5 = System.nanoTime();
@@ -112,6 +112,51 @@ public class PopulationQuery {
 					System.out.println("Total Query Time: " + (endQueryTime - startQueryTime)+"ns");
 				}
 			}while(returnType5 != QueryAlgorithm.EXIT);
+			break;
+		case "-c1":
+			V1SimpleAndSequential simple = new V1SimpleAndSequential(x, y, censusData);
+			V2SimpleAndParallel simPar = new V2SimpleAndParallel(x, y, censusData, 0);
+			long startTime = System.nanoTime();
+			simple.findUSRectangle();
+			long endTime = System.nanoTime();
+			long seqDuration = endTime - startTime;
+			System.out.println("Total PreProcessing Time for Simple and Sequential: " + seqDuration +"ns");
+			long parDuration = 0;
+			int initialCutoff = 1;
+			
+			do {
+				initialCutoff += 1;
+				simPar = new V2SimpleAndParallel(x, y, censusData, (initialCutoff));
+				long startTime1 = System.nanoTime();
+				simPar.findUSRectangle();
+				long endTime1 = System.nanoTime();
+				parDuration = endTime1 - startTime1;
+				System.out.println("Cutoff:  " + initialCutoff + " Total Time : " + parDuration);
+			}while(parDuration > seqDuration);
+			System.out.println("Sequential Cutoff:  " + initialCutoff);
+			break;
+			
+		case "-c2":
+			V3SmarterAndSequential smaSeq = new V3SmarterAndSequential(x, y, censusData);
+			V4SmarterAndParallel smaPar = new V4SmarterAndParallel(x, y, censusData, 0);
+			long startTime3 = System.nanoTime();
+			smaSeq.findUSRectangle();
+			long endTime3 = System.nanoTime();
+			long smaSeqDuration = endTime3 - startTime3;
+			System.out.println("Total PreProcessing Time for Smarter and Sequential: " + smaSeqDuration +"ns");
+			long smaParDuration = 0;
+			int cutoff = 0;
+			
+			do {
+				cutoff += 500;
+				smaPar = new V4SmarterAndParallel(x, y, censusData, (cutoff));
+				long startTime1 = System.nanoTime();
+				smaPar.findUSRectangle();
+				long endTime1 = System.nanoTime();
+				smaParDuration = endTime1 - startTime1;
+				System.out.println("Cutoff:  " + cutoff + " Total Time : " + smaParDuration);
+			}while(smaParDuration > smaSeqDuration);
+			System.out.println("Sequential Cutoff:  " + cutoff);
 			break;
 
 		}
