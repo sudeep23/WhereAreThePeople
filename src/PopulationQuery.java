@@ -218,6 +218,40 @@ public class PopulationQuery {
 				querySize += 50;
 			}while(querySize < x);
 			break;
+			
+		case "-p3":
+			V2SimpleAndParallel spV2 = new V2SimpleAndParallel(x, y, censusData,7000);
+			V4SmarterAndParallel spV4 = new V4SmarterAndParallel(x, y, censusData,7000);
+			long preSt3 = System.nanoTime();
+			spV2.findUSRectangle();
+			long preEt3 = System.nanoTime();
+			System.out.println("V2 Processing time: " + (preEt3 - preSt3));
+			
+			long preSt4 = System.nanoTime();
+			spV4.findUSRectangle();
+			long preEt4 = System.nanoTime();
+			System.out.println("V4 Processing time: " + (preEt4 - preSt4));
+			
+			int querySize1 = 50;
+			do {
+				spV2.inputRecBoundary =  new Rectangle(1, querySize1, querySize1, 1);
+				spV4.inputRecBoundary =  new Rectangle(1, querySize1, querySize1, 1);
+				
+				long st1 = System.nanoTime();
+				spV2.queryPopulation();
+				long et1 = System.nanoTime();
+				
+				
+				long st2 = System.nanoTime();
+				spV4.queryPopulation();
+				long et2 = System.nanoTime();
+				
+				System.out.println("Query Size: "+ querySize1 + " V2 Time : " + (et1-st1)+ " V4 Time : " + (et2-st2));
+				
+				
+				querySize1 += 50;
+			}while(querySize1 < x);
+			break;
 
 		}
 		
