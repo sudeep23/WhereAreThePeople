@@ -158,8 +158,70 @@ public class PopulationQuery {
 			}while(smaParDuration > smaSeqDuration);
 			System.out.println("Sequential Cutoff:  " + cutoff);
 			break;
+			
+		case "-p1":
+			
+			int grid = 10;
+			do {
+				V4SmarterAndParallel spV4 = new V4SmarterAndParallel(grid,grid, censusData,1000);
+				V5SmarterAndLockedBased slV5 = new V5SmarterAndLockedBased(grid,grid, censusData,1000);
+				
+				long st1 = System.nanoTime();
+				spV4.findUSRectangle();
+				long et1 = System.nanoTime();
+				
+				
+				long st2 = System.nanoTime();
+				slV5.findUSRectangle();
+				long et2 = System.nanoTime();
+				
+				System.out.println("Grid: "+ grid + " V4 Time : " + (et1-st1)+ " V5 Time : " + (et2-st2));
+				if(grid == 10) {
+					grid = 50;
+				}else {
+					grid += 50;
+				}
+			}while(grid <= 500);
+			
+			break;
+			
+		case "-p2":
+			V1SimpleAndSequential ssV1 = new V1SimpleAndSequential(x, y, censusData);
+			V3SmarterAndSequential ssV3 = new V3SmarterAndSequential(x, y, censusData);
+			long preSt1 = System.nanoTime();
+			ssV1.findUSRectangle();
+			long preEt1 = System.nanoTime();
+			System.out.println("V1 Processing time: " + (preEt1 - preSt1));
+			
+			long preSt2 = System.nanoTime();
+			ssV3.findUSRectangle();
+			long preEt2 = System.nanoTime();
+			System.out.println("V3 Processing time: " + (preEt2 - preSt2));
+			
+			int querySize = 50;
+			do {
+				ssV1.inputRecBoundary =  new Rectangle(1, querySize, querySize, 1);
+				ssV3.inputRecBoundary =  new Rectangle(1, querySize, querySize, 1);
+				
+				long st1 = System.nanoTime();
+				ssV1.queryPopulation();
+				long et1 = System.nanoTime();
+				
+				
+				long st2 = System.nanoTime();
+				ssV3.queryPopulation();
+				long et2 = System.nanoTime();
+				
+				System.out.println("Query Size: "+ querySize + " V1 Time : " + (et1-st1)+ " V3 Time : " + (et2-st2));
+				
+				
+				querySize += 50;
+			}while(querySize < x);
+			break;
 
 		}
+		
+
 
 	}
 	
